@@ -13,9 +13,14 @@ export default async function uploadController(req:Request,res:Response) {
    {
       throw new BadRequest('File not recived');
    }
+   if(Number(req.params.time) -0  >3600*24)
+   {
+     throw new BadRequest('Cant be higher than 1 day');
+   }
+   const maxTime= Number(req.params.time)
    
 const command=await generatePresignedUrl(file.key);
-   const url = await getSignedUrl(S3ClientObject, command, { expiresIn: 3600 }); 
+   const url = await getSignedUrl(S3ClientObject, command, { expiresIn:  maxTime}); 
  
  
   
