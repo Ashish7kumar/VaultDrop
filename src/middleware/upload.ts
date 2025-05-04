@@ -4,6 +4,8 @@ import multerS3 from "multer-s3"
 import S3ClientObject from "../config/aws.config";
 import {BUCKET_NAME } from "../config/server.config";
 import NotFound from "../errors/NotFound";
+import { GetObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 if (!BUCKET_NAME) {
   
     throw new NotFound('Bucket not found');
@@ -16,11 +18,13 @@ const upload=multer({
         bucket: BUCKET_NAME,
         key: function (req, file, cb) {
            
-            cb(null, `${uuidv4()}`); 
+            cb(null, `${uuidv4()}+${file.originalname}`); 
         },
 
 
     })
 })
+
+
 
 export default upload;
