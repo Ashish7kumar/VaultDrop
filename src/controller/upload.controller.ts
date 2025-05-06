@@ -8,11 +8,16 @@ import { BUCKET_NAME, SECRET_KEY } from "../config/server.config";
 import generatePresignedUrl from "../utils/generatePresignedUrl";
 import MulterS3File from "../types/S3file.type";
 import redisClient from "../config/redis.config";
+import sendEmail from "../utils/sendingEmail";
 export default async function uploadController(req:Request,res:Response) {
    const file=req.file as MulterS3File;
    if(!file || !file.key)
    {
       throw new BadRequest('File not recived');
+   }
+   if(!req.body.receiverEmail)
+   { 
+      throw new BadRequest('Reciver Email not provided');
    }
    
    
@@ -29,6 +34,7 @@ const command=await generatePresignedUrl(file.key);
 const secretKey = Math.floor(100000 + Math.random() * 900000).toString();
  await redisClient.set(secretKey,url);
 
+await sendEmail(req.body.receiverEmail,secretKey);
     
    
    res.status(200).json({
