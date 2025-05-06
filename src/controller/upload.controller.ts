@@ -4,16 +4,16 @@ import NotImplemented from "../errors/NotImplemented";
 import BadRequest from "../errors/BadRequest";
 import S3ClientObject from "../config/aws.config";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import generatePresignedUrl from "../utils/generatePresignedUrl";
+import MulterS3File from "../types/S3file.type";
+import redisClient from "../config/redis.config";
+import sendEmailJob from "../jobs/email.job";
+import { v4 as uuidv4 } from "uuid";
 import {
   BUCKET_NAME,
   SECRET_KEY,
   FRONTEND_LINK,
 } from "../config/server.config";
-import generatePresignedUrl from "../utils/generatePresignedUrl";
-import MulterS3File from "../types/S3file.type";
-import redisClient from "../config/redis.config";
-import sendEmail from "../utils/sendingEmail";
-import { v4 as uuidv4 } from "uuid";
 export default async function uploadController(req: Request, res: Response) {
   const file = req.file as MulterS3File;
   if (!file || !file.key) {
@@ -45,7 +45,7 @@ export default async function uploadController(req: Request, res: Response) {
     })
   );
 
-  await sendEmail(req.body.receiverEmail, secretKey);
+  await sendEmailJob(req.body.receiverEmail, secretKey);
 
   res.status(200).json({
     Success: true,
