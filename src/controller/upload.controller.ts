@@ -11,7 +11,7 @@ import {
 } from "../config/server.config";
 import generatePresignedUrl from "../utils/generatePresignedUrl";
 import MulterS3File from "../types/S3file.type";
-import redisClient from "../config/redisDb.config";
+import redisClient from "../config/redis.config";
 import sendEmail from "../utils/sendingEmail";
 import { v4 as uuidv4 } from "uuid";
 export default async function uploadController(req: Request, res: Response) {
@@ -19,10 +19,10 @@ export default async function uploadController(req: Request, res: Response) {
   if (!file || !file.key) {
     throw new BadRequest("File not recived");
   }
-  if(file.size)
-  if (!req.body.receiverEmail) {
-    throw new BadRequest("Reciver Email not provided");
-  }
+  if (file.size)
+    if (!req.body.receiverEmail) {
+      throw new BadRequest("Reciver Email not provided");
+    }
 
   if (Number(req.params.timeLimit) - 0 > 3600 * 24) {
     throw new BadRequest("Cant be higher than 1 day");

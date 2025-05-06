@@ -10,3 +10,5 @@ export const EMAIL_USER=process.env.EMAIL_USER;
 export const EMAIL_PASSWORD=process.env.EMAIL_PASSWORD;
 export const EMAIL_SERVICE_PROVIDER=process.env.EMAIL_SERVICE_PROVIDER;
 export const FRONTEND_LINK=process.env.FRONTEND_LINK;
+export const  REDIS_HOST=process.env.REDIS_HOST;
+export const  REDIS_PORT=Number(process.env.REDIS_PORT);

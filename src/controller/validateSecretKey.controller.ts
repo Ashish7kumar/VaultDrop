@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import BadRequest from "../errors/BadRequest";
-import redisClient from "../config/redisDb.config";
+import redisClient from "../config/redis.config";
 import NotFound from "../errors/NotFound";
 
 async function validateSecretKey(req: Request, res: Response) {

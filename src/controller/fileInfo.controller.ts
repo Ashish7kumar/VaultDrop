@@ -1,4 +1,4 @@
-import redisClient from "../config/redisDb.config";
+import redisClient from "../config/redis.config";
 import { Request, Response } from "express";
 
 async function getFileData(req: Request, res: Response) {
