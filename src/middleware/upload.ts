@@ -11,19 +11,18 @@ if (!BUCKET_NAME) {
     throw new NotFound('Bucket not found');
   }
   
-const upload=multer({
+  const upload = multer({
     storage: multerS3({
-        s3: S3ClientObject,
-        acl: undefined,
-        bucket: BUCKET_NAME,
-        key: function (req, file, cb) {
-           
-            cb(null, `${uuidv4()}+${file.originalname}`); 
-        },
-
-
-    })
-})
+      s3: S3ClientObject,
+      acl: undefined, 
+      bucket: BUCKET_NAME,
+      key: function (req, file, cb) {
+        cb(null, `${uuidv4()}+${file.originalname}`);
+      }
+    }),
+    limits: { fileSize: 1 * 1024 * 1024*100 } 
+  });
+  
 
 
 

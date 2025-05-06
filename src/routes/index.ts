@@ -3,7 +3,7 @@ import uploadController from "../controller/upload.controller";
 import { fileSendingRateLimiter,secretKeyRateLimiter } from "../middleware/rateLimiter";
 import upload from "../middleware/upload";
 const apiRouter=Router();
-import getFileData from "../controller/userInfo.controller";
+import getFileData from "../controller/fileInfo.controller";
 import validateSecretKey from "../controller/validateSecretKey.controller";
 import { validate } from "uuid";
 apiRouter.post('/upload/:timeLimit',fileSendingRateLimiter,upload.single('file'),uploadController);

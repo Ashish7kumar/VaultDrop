@@ -3,11 +3,12 @@ import { MulterError } from "multer"
 import BaseError from "../errors/BaseError"
 export default function errorHandler(err:Error |BaseError,req:Request,res:Response,next:NextFunction){
     if(err instanceof MulterError )
-    {
-       if(err.name=="LIMIT_FILE_SIZE")
+    { 
+       if(err.message=="File too large")
        {
         res.status(413).json({
-            status:"Success"
+            status:"False",
+            message:"file size limit exceeds"
         })
        }
     }
