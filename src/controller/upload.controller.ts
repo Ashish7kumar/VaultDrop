@@ -30,8 +30,7 @@ export default async function uploadController(req:Request,res:Response) {
    
 const command=await generatePresignedUrl(file.key);
    const url = await getSignedUrl(S3ClientObject, command, { expiresIn:  maxTime}); 
- 
-const secretKey = Math.floor(100000 + Math.random() * 900000).toString();
+   const secretKey = Math.floor(10000000 + Math.random() * 90000000).toString();
  await redisClient.set(secretKey,url);
 
 await sendEmail(req.body.receiverEmail,secretKey);
