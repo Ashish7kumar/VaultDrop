@@ -12,3 +12,5 @@ export const EMAIL_SERVICE_PROVIDER=process.env.EMAIL_SERVICE_PROVIDER;
 export const FRONTEND_LINK=process.env.FRONTEND_LINK;
 export const  REDIS_HOST=process.env.REDIS_HOST;
 export const  REDIS_PORT=Number(process.env.REDIS_PORT);
+export const CRYPTO_ALGO=process.env.CRYPTO_ALGO;
+export const SECRET_RANDOM_KEY=process.env.SECRET_RANDOM_KEY;

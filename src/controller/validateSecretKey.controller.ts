@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
+import bcrypt from "bcrypt"
 import BadRequest from "../errors/BadRequest";
 import redisClient from "../config/redis.config";
 import NotFound from "../errors/NotFound";
-
+import { decrypt } from "../utils/encryptionDecryption";
 async function validateSecretKey(req: Request, res: Response) {
   if (!req.body || !req.body.secretKey) {
     throw new BadRequest("Secret is not provided");
@@ -14,10 +15,12 @@ async function validateSecretKey(req: Request, res: Response) {
   }
   const parsedData = JSON.parse(fileData);
   const keyStoredInDb = parsedData.secretKey;
-  if (req.body.secretKey === keyStoredInDb) {
+  const isSame=await bcrypt.compare(req.body.secretKey,keyStoredInDb);
+  const download_url=await decrypt(parsedData.url,parsedData.iv);
+  if (isSame) {
     res.status(200).json({
       success: true,
-      download_url: parsedData.url,
+      download_url: download_url,
     });
   }
 }

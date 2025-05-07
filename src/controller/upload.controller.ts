@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcrypt";
 import NotFound from "../errors/NotFound";
 import NotImplemented from "../errors/NotImplemented";
 import BadRequest from "../errors/BadRequest";
@@ -8,7 +10,7 @@ import generatePresignedUrl from "../utils/generatePresignedUrl";
 import MulterS3File from "../types/S3file.type";
 import redisClient from "../config/redis.config";
 import sendEmailJob from "../jobs/email.job";
-import { v4 as uuidv4 } from "uuid";
+import { encrypt } from "../utils/encryptionDecryption";
 import {
   BUCKET_NAME,
   SECRET_KEY,
@@ -36,15 +38,17 @@ export default async function uploadController(req: Request, res: Response) {
   });
   const secretKey = Math.floor(10000000 + Math.random() * 90000000).toString();
   const code = uuidv4().replace(/-/g, "");
+  const encryptedResult=await encrypt(url);
   await redisClient.set(
     code,
     JSON.stringify({
       user: req.body.user ? req.body.user : null,
-      url: url,
-      secretKey: secretKey,
+      url: encryptedResult.encryptedData,
+      iv:encryptedResult.iv,
+      secretKey: await bcrypt.hash(secretKey,10),
     })
   );
-
+ 
   await sendEmailJob(req.body.receiverEmail, secretKey);
 
   res.status(200).json({
